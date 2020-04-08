@@ -18,8 +18,10 @@ def ui_form_jokes():
     """
     # get _all_ the jokes
     jokes = joke_get(0)
+    # get category
+    categories = category_get(0)
     # render jokes in HTML template
-    return render_template("jokes.html", result=jokes)
+    return render_template("jokes.html", result=jokes, categories=categories)
 
 @BP.route("/create", methods=["GET", "POST"])
 def ui_form_create_joke():
