@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  joke_api:
+    container_name: joke_api
+    image: joke_api:latest
+    ports:
+      - "5000:5000/tcp"
+    volumes:
+       - joke-data:/opt/joke_api/instance
+    restart: unless-stopped
+
+volumes:
+  joke-data:
