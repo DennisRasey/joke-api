@@ -9,6 +9,7 @@ Internal reference: 56946650b629ee0ed9f6876e6b49cfe92389a1c9
 - Refactored and cleaned-up code
 - API calls are now able to handle names instead of IDs
 - added API call for retrieving jokes with a minimum ranking (`/api/jokes/<category>/<ranking>`)
+- Joke overview shows category name instead of ID
 
 # Release 0.5.0
 
