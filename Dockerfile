@@ -9,10 +9,9 @@ RUN apk add --update python3 py3-pip@community
 RUN pip3 install flask
 
 # create application directory
-RUN mkdir -p /opt/joke_api/instance /opt/joke_api/joke_api/templates
-COPY joke_api/templates/* /opt/joke_api/joke_api/templates/
-COPY joke_api/* /opt/joke_api/joke_api/
-COPY entrypoint.sh /opt/joke_api/entrypoint.sh
+RUN mkdir -p /opt/joke_api/joke_api
+ADD joke_api /opt/joke_api/joke_api
+ADD entrypoint.sh /opt/joke_api/entrypoint.sh
 
 # volume configuration
 VOLUME ["/opt/joke_api/instance"]
