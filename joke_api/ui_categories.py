@@ -33,7 +33,7 @@ def ui_form_create_category():
         msg = {}
         msg['link'] = "/categories"
         msg['link_text'] = "back"
-        msg['text'] = "Catagory could not be created!"
+        msg['text'] = "Category could not be created!"
         if category_set(
                 request.form["name"]
             ):
