@@ -6,8 +6,8 @@ joke_api /jokes UI blueprint
 from flask import (
     Blueprint, request, render_template
 )
-from joke_api.api_categories import category_get
-from joke_api.api_jokes import joke_get, joke_set, joke_delete, joke_random
+from .api_categories import category_get
+from .api_jokes import joke_get, joke_set, joke_delete, joke_random
 
 BP = Blueprint('ui_jokes', __name__, url_prefix='/jokes')
 
@@ -31,10 +31,11 @@ def ui_form_create_joke():
     """
     if request.method == "POST":
         # create joke
-        msg = {}
-        msg['link'] = "/jokes"
-        msg['link_text'] = "back"
-        msg['text'] = "Joke could not be created!"
+        msg = {
+            "link": "/jokes",
+            "link_text": "back",
+            "text": "Joke could not be created!"
+        }
         if joke_set(
                 request.form["category_id"],
                 request.form["joke_text"],
@@ -66,8 +67,11 @@ def ui_form_joke_random():
     This function shows a random joke
     """
     # display a random joke
-    result = joke_random()["results"][0]
-    return render_template("joke.html", joke=result)
+    random_joke = joke_random()["results"][0]
+    joke_category = category_get(random_joke["category_id"])
+    return render_template(
+        "joke.html", joke=random_joke, category=joke_category["results"][0]
+    )
 
 @BP.route("/random/<int:category_id>", methods=["GET"])
 def ui_form_joke_random_category(category_id):
@@ -87,10 +91,11 @@ def ui_form_delete_joke(joke_id):
     :type joke_id: int
     """
     # try to delete joke
-    msg = {}
-    msg['link'] = "/jokes"
-    msg['link_text'] = "back"
-    msg['text'] = "Joke could not be deleted!"
+    msg = {
+        "link": "/jokes",
+        "link_text": "back",
+        "text": "Joke could not be deleted!"
+    }
     if joke_delete(joke_id):
         msg['text'] = "Joke deleted!"
     return render_template("message.html", message=msg)
@@ -106,10 +111,11 @@ def ui_form_edit_joke(joke_id):
     """
     if request.method == "POST":
         # edit joke
-        msg = {}
-        msg['link'] = "/jokes"
-        msg['link_text'] = "back"
-        msg['text'] = "Joke could not be edited!"
+        msg = {
+            "link": "/jokes",
+            "link_text": "back",
+            "text": "Joke could not be edited!"
+        }
         if joke_set(
                 request.form["category_id"],
                 request.form["joke_text"],

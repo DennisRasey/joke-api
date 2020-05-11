@@ -7,7 +7,7 @@ import json
 import logging
 import sqlite3
 
-from joke_api.db import get_db
+from .db import get_db
 
 def return_result(result):
     """
@@ -18,11 +18,15 @@ def return_result(result):
     """
     ret = {}
     if result:
-        ret["code"] = 0
-        ret["message"] = "SUCCESS"
+        ret = {
+            "code": 0,
+            "message": "SUCCESS"
+        }
     else:
-        ret["code"] = 1
-        ret["message"] = "FAILURE"
+        ret = {
+            "code": 1,
+            "message": "FAILURE"
+        }
     return json.dumps(ret)
 
 def get_category_id_by_name(category_name):
@@ -39,13 +43,11 @@ def get_category_id_by_name(category_name):
             "SELECT category_id FROM categories WHERE category_name=?;",
             (category_name,)
         )
-        # prepare result
-        result = {}
-        result["results"] = [dict(row) for row in categories.fetchall()]
-        return result
+        # return result
+        return {"results": [dict(row) for row in categories.fetchall()]}
     except IndexError:
         logging.error('Category not found')
         return False
     except sqlite3.Error as err:
-        logging.error('Unable to remove category: %s', err)
+        logging.error('Unable to find category: %s', err)
         return False

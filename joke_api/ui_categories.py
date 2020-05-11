@@ -7,7 +7,7 @@ import logging
 from flask import (
     Blueprint, request, render_template
 )
-from joke_api.api_categories import category_get, category_set, category_delete
+from .api_categories import category_get, category_set, category_delete
 
 BP = Blueprint('ui_categories', __name__, url_prefix='/categories')
 
@@ -30,10 +30,11 @@ def ui_form_create_category():
     """
     if request.method == "POST":
         # create category
-        msg = {}
-        msg['link'] = "/categories"
-        msg['link_text'] = "back"
-        msg['text'] = "Category could not be created!"
+        msg = {
+            "link": "/categories",
+            "link_text": "back",
+            "text": "Category could not be created!"
+        }
         if category_set(
                 request.form["name"]
             ):
@@ -53,10 +54,11 @@ def ui_form_delete_category(category_id):
     :type category_id: int
     """
     # try to delete category
-    msg = {}
-    msg['link'] = "/categories"
-    msg['link_text'] = "back"
-    msg['text'] = "Category could not be deleted!"
+    msg = {
+        "link": "/categories",
+        "link_text": "back",
+        "text": "Category could not be deleted!"
+    }
     if category_delete(category_id):
         msg['text'] = "Category deleted!"
     return render_template("message.html", message=msg)
@@ -72,10 +74,11 @@ def ui_form_edit_category(category_id):
     """
     if request.method == "POST":
         # edit category
-        msg = {}
-        msg['link'] = "/categories"
-        msg['link_text'] = "back"
-        msg['text'] = "Category could not be edited!"
+        msg = {
+            "link": "/categories",
+            "link_text": "back",
+            "text": "Category could not be edited!"
+        }
         if category_set(
                 request.form["category_name"],
                 category_id,
@@ -86,8 +89,8 @@ def ui_form_edit_category(category_id):
     else:
         # show form, preselect values
         try:
-            result = category_get(category_id)["results"][0]
-            result = render_template("category_edit.html", category=result)
+            category_name = category_get(category_id)["results"][0]
+            result = render_template("category_edit.html", category=category_name)
         except IndexError:
             result = render_template("category_nonexist.html")
     return result

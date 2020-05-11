@@ -9,7 +9,7 @@
       <form method="post" action="/jokes/create">
         <table>
           <tr>
-            <td>Category ID:</td>
+            <td>Category:</td>
             <td>
               <select name="category_id">
                 {% for item in categories.results %}
@@ -22,7 +22,10 @@
             <td>Joke text:</td><td><textarea name="joke_text" rows="10" cols="30"></textarea></td>
           </tr>
           <tr>
-            <td>Joke ranking (from 1 for bad to 10 for good)</td><td><input name="joke_rank" type="number"></td>
+            <td>Joke ranking</td>
+            <td>
+              1 (bad) <input type="range" name="joke_rank" min="1" max="10" value="1" onchange="updateTextInput(this.value);"> 10 (good)
+            </td>
           </tr>
           <tr>
             <td colspan="2"><input type="submit" value="Submit"></td>

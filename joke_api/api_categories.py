@@ -11,8 +11,8 @@ from flask import (
     Blueprint, Response, request
 )
 
-from joke_api.db import get_db
-from joke_api.api_shared import return_result, get_category_id_by_name
+from .db import get_db
+from .api_shared import return_result, get_category_id_by_name
 
 BP = Blueprint('api_categories', __name__, url_prefix='/api/categories')
 
@@ -35,10 +35,8 @@ def category_get(category_id):
             # return all categories
             categories = database.execute("SELECT * FROM categories;")
 
-        # prepare result
-        result = {}
-        result["results"] = [dict(row) for row in categories.fetchall()]
-        return result
+        # return result
+        return {"results": [dict(row) for row in categories.fetchall()]}
     except sqlite3.Error as err:
         logging.error('Unable to get category: %s', err)
         return False
@@ -126,8 +124,8 @@ def api_category_get_by_name(category_name):
     """
     This function shows a particular category by name
 
-    :param category_id: category name
-    :type category_id: str
+    :param category_name: category name
+    :type category_name: str
     """
     category = get_category_id_by_name(category_name)
     category_id = next(iter(category['results'][0].values()))

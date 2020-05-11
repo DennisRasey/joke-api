@@ -12,8 +12,8 @@ from flask import (
     Blueprint, Response, request
 )
 
-from joke_api.db import get_db
-from joke_api.api_shared import return_result, get_category_id_by_name
+from .db import get_db
+from .api_shared import return_result, get_category_id_by_name
 
 BP = Blueprint('api_jokes', __name__, url_prefix='/api/jokes')
 
@@ -36,10 +36,8 @@ def joke_get(joke_id):
             # return all jokes
             jokes = database.execute("SELECT * FROM jokes;")
 
-        # prepare result
-        result = {}
-        result["results"] = [dict(row) for row in jokes.fetchall()]
-        return result
+        # return result
+        return {"results": [dict(row) for row in jokes.fetchall()]}
     except sqlite3.Error as err:
         logging.error('Unable to get joke: %s', err)
         return False
@@ -114,6 +112,8 @@ def joke_random(category_id=0, joke_rank=None):
 
     :param category_id: category ID
     :type category_id: int
+    :param joke_rank: joke ranking
+    :typ joke_rank: int
     """
     database = get_db()
     try:
@@ -122,7 +122,7 @@ def joke_random(category_id=0, joke_rank=None):
             # limit to specific category and ranking
             jokes = database.execute(
                 "SELECT * FROM jokes WHERE category_id=? AND joke_rank >= ?;",
-                (category_id,joke_rank,)
+                (category_id, joke_rank,)
             )
         elif category_id > 0:
             # limit to specific category
