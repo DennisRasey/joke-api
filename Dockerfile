@@ -1,12 +1,16 @@
-FROM alpine:3.11
-MAINTAINER info@cstan.io
+FROM alpine:3.19.1
+MAINTAINER drasey@babbee.org
 
 # add base and community repositories
+
 ADD repositories /etc/apk/repositories
-RUN apk add --update python3 py3-pip@community
+RUN apk add -X https://nl.alpinelinux.org/alpine/edge/main -u alpine-keys --allow-untrusted --no-cache
+RUN apk add --update python3 py3-pip@community --no-cache
 
 # install dependencies
 RUN pip3 install flask
+RUN pip3 cache purge
+
 
 # create application directory
 RUN mkdir -p /opt/joke_api/joke_api
